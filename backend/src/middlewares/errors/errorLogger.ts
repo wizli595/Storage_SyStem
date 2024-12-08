@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../../utils/customError";
+import chalk from "chalk";
 
 export const errorLogger = (
   err: CustomError | Error,
@@ -7,11 +8,22 @@ export const errorLogger = (
   res: Response,
   next: NextFunction
 ) => {
+  const timestamp = new Date().toISOString();
+  const statusCode = err instanceof CustomError ? err.statusCode : 500;
   if (err instanceof CustomError && !err.isOperational) {
-    console.error(`[${new Date().toISOString}] - ${err.message}`);
-    console.log(err.stack);
+    console.warn(
+      chalk.yellow(
+        `[WARNING] [${timestamp}] - ${err.message} (Status: ${statusCode})`
+      )
+    );
   } else {
-    console.warn(`[WARNING] ${err.message}`);
+    // Log non-operational errors in red
+    console.error(
+      chalk.red(
+        `[CRITICAL] [${timestamp}] - ${err.message} (Status: ${statusCode})`
+      )
+    );
+    console.error(chalk.gray(err.stack || "No stack trace available."));
   }
   next(err);
 };
