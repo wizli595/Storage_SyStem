@@ -12,3 +12,64 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+enum Unit {
+  KG
+  PLATE
+  LITRE
+  PIECE
+}
+
+model Item {
+  id         String       @id @default(cuid()) @map("_id") @db.ObjectId
+  name       String
+  unit       Unit
+  price      Float
+  stock      Float
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Ingredient Ingredient[]
+  StockLog   StockLog[]
+}
+
+model Plate {
+  id         String       @id @default(cuid()) @map("_id") @db.ObjectId
+  name       String
+  price      Float
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Ingredient Ingredient[]
+  Order      Order[]
+}
+
+model Ingredient {
+  id        String   @id @default(cuid()) @map("_id") @db.ObjectId
+  itemId    String   @db.ObjectId
+  plateId   String   @db.ObjectId
+  quantity  Float
+  item      Item     @relation(fields: [itemId], references: [id])
+  plate     Plate    @relation(fields: [plateId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([itemId], name: "unique_ingredient")
+  @@index([plateId])
+}
+
+model Order {
+  id        String   @id @default(cuid()) @map("_id") @db.ObjectId
+  plateId   String   @db.ObjectId
+  plate     Plate    @relation(fields: [plateId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockLog {
+  id       String   @id @default(cuid()) @map("_id") @db.ObjectId
+  itemId   String   @db.ObjectId
+  quantity Float
+  actionBy String   @default("admin")
+  item     Item     @relation(fields: [itemId], references: [id])
+  date     DateTime @default(now())
+}
