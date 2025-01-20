@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import router from "./routes/testRoute";
 
 import morgan from "morgan";
 import { errorHandler, errorLogger, notFoundHandler } from "./middlewares";
@@ -15,6 +16,9 @@ app.use(morgan("common", { stream: accessLogStream(__dirname) }));
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, world!");
 });
+
+// routes
+app.use("/test", router);
 
 // error handlers
 app.use(notFoundHandler);

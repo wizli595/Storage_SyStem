@@ -21,7 +21,7 @@ enum Unit {
 }
 
 model Item {
-  id         String       @id @default(cuid()) @map("_id") @db.ObjectId
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   unit       Unit
   price      Float
@@ -33,7 +33,7 @@ model Item {
 }
 
 model Plate {
-  id         String       @id @default(cuid()) @map("_id") @db.ObjectId
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   price      Float
   createdAt  DateTime     @default(now())
@@ -43,7 +43,7 @@ model Plate {
 }
 
 model Ingredient {
-  id        String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   itemId    String   @db.ObjectId
   plateId   String   @db.ObjectId
   quantity  Float
@@ -57,7 +57,7 @@ model Ingredient {
 }
 
 model Order {
-  id        String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   plateId   String   @db.ObjectId
   plate     Plate    @relation(fields: [plateId], references: [id])
   quantity  Int
@@ -66,7 +66,7 @@ model Order {
 }
 
 model StockLog {
-  id       String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   itemId   String   @db.ObjectId
   quantity Float
   actionBy String   @default("admin")
