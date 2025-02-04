@@ -1,24 +1,23 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, Request, NextFunction } from "express";
 import { CustomError } from "../../utils/customError";
-import logger from "../../utils/logger";
-
+import { env } from "../../config";
 export const errorHandler = (
-  err: Error,
+  err: CustomError | Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  logger.error(`[ERROR] ${req.method} ${req.originalUrl} - ${err.message}`);
+  const statusCode = err instanceof CustomError ? err.statusCode : 500;
+  const message =
+    err instanceof CustomError && err.isOperational
+      ? err.message
+      : "Internal Server Error";
 
-  if (err instanceof CustomError) {
-    return res.status(err.statusCode).json({
-      success: false,
-      message: err.message,
-    });
-  }
-
-  return res.status(500).json({
+  res.status(statusCode).json({
     success: false,
-    message: "Internal Server Error",
+    error: {
+      message,
+      ...(env.NODE_ENV === "development" ? { stack: err.stack } : {}),
+    },
   });
 };

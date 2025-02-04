@@ -92,7 +92,3 @@ We welcome contributions to this project. Please see the contributing guidelines
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
-
-```
-
-```

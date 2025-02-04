@@ -5,7 +5,7 @@ import testService from "../services/testService";
 class testController extends BaseController {
   async getAllTest(req: Request, res: Response, next: NextFunction) {
     await this.handleRequest(req, res, next, async () => {
-      return await testService.findMany();
+      return await testService.findAll();
     });
   }
 }

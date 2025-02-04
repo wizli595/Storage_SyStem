@@ -1,71 +1,52 @@
-import { PrismaClient } from "@prisma/client";
+import { BaseRepository } from "./BaseRepository";
 
 /**
- * Generic BaseService for Prisma models
- * @template Model - The Prisma model type
- * @template Delegate - The Prisma delegate type
+ * Generic BaseService for handling business logic
+ * @template Model - The entity type
+ * @template Repository - The repository handling database operations
  */
 export abstract class BaseService<
   Model,
-  Delegate extends {
-    create: (args: any) => Promise<Model>;
-    findUnique: (args: any) => Promise<Model | null>;
-    findMany: (args?: any) => Promise<Model[]>;
-    update: (args: any) => Promise<Model>;
-    delete: (args: any) => Promise<Model>;
-  }
+  Repository extends BaseRepository<Model>
 > {
-  protected prisma: PrismaClient;
-  protected model: Delegate;
+  protected repository: Repository;
 
-  constructor(model: Delegate) {
-    this.prisma = new PrismaClient();
-    this.model = model;
+  constructor(repository: Repository) {
+    this.repository = repository;
   }
 
   /**
-   * Create a new record
+   * Create a new record using the repository
    */
-  async create<T extends Parameters<Delegate["create"]>[0]>(
-    data: T["data"]
-  ): Promise<Model> {
-    return this.model.create({ data });
+  async create(data: Partial<Model>): Promise<Model> {
+    return this.repository.create(data);
   }
 
   /**
    * Find a record by ID
    */
-  async findUnique<T extends Parameters<Delegate["findUnique"]>[0]>(
-    where: T["where"]
-  ): Promise<Model | null> {
-    return this.model.findUnique({ where });
+  async findById(id: string): Promise<Model | null> {
+    return this.repository.findById(id);
   }
 
   /**
    * Get all records
    */
-  async findMany<T extends Parameters<Delegate["findMany"]>[0]>(
-    args?: T
-  ): Promise<Model[]> {
-    return this.model.findMany(args);
+  async findAll(): Promise<Model[]> {
+    return this.repository.findAll();
   }
 
   /**
    * Update a record by ID
    */
-  async update<T extends Parameters<Delegate["update"]>[0]>(
-    where: T["where"],
-    data: T["data"]
-  ): Promise<Model> {
-    return this.model.update({ where, data });
+  async update(id: string, data: Partial<Model>): Promise<Model> {
+    return this.repository.update(id, data);
   }
 
   /**
    * Delete a record by ID
    */
-  async delete<T extends Parameters<Delegate["delete"]>[0]>(
-    where: T["where"]
-  ): Promise<Model> {
-    return this.model.delete({ where });
+  async delete(id: string): Promise<Model> {
+    return this.repository.delete(id);
   }
 }
