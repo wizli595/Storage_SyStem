@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import router from "./routes/testRoute";
+import itemRouter from "./routes/itemRoute";
 
 import morgan from "morgan";
 import { errorHandler, errorLogger, notFoundHandler } from "./middlewares";
@@ -19,6 +20,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // routes
 app.use("/test", router);
+
+app.use("/items", itemRouter);
 
 // error handlers
 app.use(notFoundHandler);

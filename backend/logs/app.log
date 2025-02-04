@@ -1,0 +1,1 @@
+{"error":{"clientVersion":"6.2.1","code":"P2023","meta":{"message":"Malformed ObjectID: provided hex string representation must be exactly 12 bytes, instead got: \"2\", length 1.","modelName":"Item"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Request failed:","method":"GET","timestamp":"2025-02-04T16:05:44.141Z","url":"/items/2"}
