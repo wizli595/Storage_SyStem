@@ -1,10 +1,10 @@
 import { Order } from "@prisma/client";
-import prisma from "../models/prismaClient";
+import prismaCLT from "../models/prismaClient";
 import { BaseRepository } from "../core/BaseRepository";
 
 class TestRepository extends BaseRepository<Order> {
   constructor() {
-    super(prisma.order);
+    super(prismaCLT.order);
   }
 
   // Example custom query
