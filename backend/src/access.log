@@ -76,3 +76,10 @@ fe80::fa13:4801:fb8a:bc0c%enp1s0 - - [20/Jan/2025:20:03:05 +0000] "GET /test HTT
 ::1 - - [05/Feb/2025:14:22:48 +0000] "GET /plates/67a37423b676af6b28b61d60 HTTP/1.1" 200 165
 ::1 - - [05/Feb/2025:14:23:21 +0000] "PUT /plates/67a35b41ed94e26c803e706f HTTP/1.1" 500 999
 ::1 - - [05/Feb/2025:14:24:28 +0000] "PUT /plates/67a37423b676af6b28b61d60 HTTP/1.1" 200 172
+::1 - - [05/Feb/2025:14:35:47 +0000] "GET /plates HTTP/1.1" 200 3289
+::1 - - [05/Feb/2025:14:36:35 +0000] "GET /ingredient HTTP/1.1" 404 1244
+::1 - - [05/Feb/2025:14:36:50 +0000] "GET /ingredients HTTP/1.1" 404 1227
+::1 - - [05/Feb/2025:14:37:07 +0000] "GET /ingredients HTTP/1.1" 404 1227
+::1 - - [05/Feb/2025:14:37:23 +0000] "GET /ingredients HTTP/1.1" 404 1227
+::1 - - [05/Feb/2025:14:38:32 +0000] "GET /ingredients/67a34dcc65a07481864db49f HTTP/1.1" 404 1277
+::1 - - [05/Feb/2025:14:39:13 +0000] "GET /ingredients/plate/67a34dcc65a07481864db47d HTTP/1.1" 200 2135
