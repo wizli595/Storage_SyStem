@@ -85,6 +85,21 @@ Create a `.env` file in the `src/config/` directory and define the necessary env
 yarn dev
 ```
 
+## 📜 Backend Workflow
+
+This is the step-by-step **flow of how the backend works**:
+
+1️⃣ **Create an Item** → Add storage ingredients/products (e.g., Chicken, Flour, Rice).  
+2️⃣ **Create a Plate** → Define a meal that customers can order (e.g., Fried Chicken Meal).  
+3️⃣ **Link Ingredients to a Plate** → Assign required ingredients to each meal.  
+4️⃣ **Place an Order** → Deduct stock automatically when an order is placed.  
+5️⃣ **Request More Stock** → The kitchen requests additional stock when levels are low.  
+6️⃣ **Approve Stock Request** → The admin approves the request for replenishment.  
+7️⃣ **Issue Stock** → The approved stock is sent to the kitchen and logged.  
+8️⃣ **Stock Logs** → Every stock movement (orders, issues, approvals) is recorded for tracking.
+
+✅ **This ensures efficient stock management and prevents missing inventory.** 🚀
+
 ## Contributing
 
 We welcome contributions to this project. Please see the contributing guidelines in the `/docs/` directory for more information.
