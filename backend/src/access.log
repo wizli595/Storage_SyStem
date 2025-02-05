@@ -83,3 +83,16 @@ fe80::fa13:4801:fb8a:bc0c%enp1s0 - - [20/Jan/2025:20:03:05 +0000] "GET /test HTT
 ::1 - - [05/Feb/2025:14:37:23 +0000] "GET /ingredients HTTP/1.1" 404 1227
 ::1 - - [05/Feb/2025:14:38:32 +0000] "GET /ingredients/67a34dcc65a07481864db49f HTTP/1.1" 404 1277
 ::1 - - [05/Feb/2025:14:39:13 +0000] "GET /ingredients/plate/67a34dcc65a07481864db47d HTTP/1.1" 200 2135
+::1 - - [05/Feb/2025:15:11:06 +0000] "GET /orders HTTP/1.1" 200 9025
+::1 - - [05/Feb/2025:15:11:37 +0000] "POST /orders HTTP/1.1" 500 1076
+::1 - - [05/Feb/2025:15:12:13 +0000] "GET /plates HTTP/1.1" 200 3289
+::1 - - [05/Feb/2025:15:12:51 +0000] "POST /orders HTTP/1.1" 500 378
+::1 - - [05/Feb/2025:15:13:46 +0000] "POST /orders HTTP/1.1" 200 203
+::1 - - [05/Feb/2025:15:14:05 +0000] "GET /orders HTTP/1.1" 200 9205
+::1 - - [05/Feb/2025:15:14:37 +0000] "GET /stock-log HTTP/1.1" 200 20447
+::1 - - [05/Feb/2025:15:15:01 +0000] "GET /orders HTTP/1.1" 200 9205
+::1 - - [05/Feb/2025:15:15:27 +0000] "GET /orders/67a3802aeccffd3dfb5bcbba HTTP/1.1" 200 203
+::1 - - [05/Feb/2025:15:15:57 +0000] "GET /plates/67a34dcc65a07481864db484 HTTP/1.1" 200 178
+::1 - - [05/Feb/2025:15:16:41 +0000] "GET /ingredient/plate/67a34dcc65a07481864db484 HTTP/1.1" 404 1306
+::1 - - [05/Feb/2025:15:16:47 +0000] "GET /ingredients/plate/67a34dcc65a07481864db484 HTTP/1.1" 200 3844
+::1 - - [05/Feb/2025:15:17:27 +0000] "GET /stock-log HTTP/1.1" 200 20447
