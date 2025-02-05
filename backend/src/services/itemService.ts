@@ -1,7 +1,7 @@
 import prismaCTL from "../models/prismaClient";
 import { Item } from "@prisma/client";
 import { BaseService } from "../core/BaseService";
-import ItemRepository from "../repositories/itemRepository";
+import ItemRepository from "../repositories/ItemRepository";
 import StockLogRepository from "../repositories/StockLogRepository";
 
 class ItemService extends BaseService<Item, ItemRepository> {

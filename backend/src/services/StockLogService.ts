@@ -1,7 +1,7 @@
 import { StockLog } from "@prisma/client";
 import { BaseService } from "../core/BaseService";
 import StockLogRepository from "../repositories/StockLogRepository";
-import itemRepository from "../repositories/itemRepository";
+import itemRepository from "../repositories/ItemRepository";
 
 class StockLogService extends BaseService<StockLog, StockLogRepository> {
   private itemRepository: itemRepository;
