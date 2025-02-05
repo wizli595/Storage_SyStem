@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ItemController from "../controllers/ItemController";
-import { itemSchema } from "../validators/itemValidator";
+import { itemSchema } from "../validators/ItemValidator";
 import { validateRequest } from "../middlewares";
 const itemRouter = Router();
 const ItemCTL = new ItemController();

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import BaseController from "../core/BaseController";
-import ItemService from "../services/itemService";
+import ItemService from "../services/ItemService";
 
 class ItemController extends BaseController {
   private itemService: ItemService;

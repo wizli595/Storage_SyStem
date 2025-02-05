@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import router from "./routes/testRoute";
-import itemRouter from "./routes/itemRoute";
+import itemRouter from "./routes/ItemRoute";
 import stockLogRouter from "./routes/StockLogRoute";
 import stockRequestRouter from "./routes/StockRequestRoute";
 import PlateRouter from "./routes/PlateRoute";
