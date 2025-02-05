@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ItemController from "../controllers/itemController";
+import ItemController from "../controllers/ItemController";
 import { itemSchema } from "../validators/itemValidator";
 import { validateRequest } from "../middlewares";
 const itemRouter = Router();
