@@ -10,4 +10,7 @@ export const itemSchema = joi.object({
   unit: joi.string().required().messages({
     "string.empty": "Unit is required",
   }),
+  price: joi.number().required().messages({
+    "number.base": "Price must be a number",
+  }),
 });
