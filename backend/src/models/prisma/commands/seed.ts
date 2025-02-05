@@ -22,24 +22,37 @@ import colors from "colors";
  */
 
 async function seed() {
-  console.log(colors.cyan("Seeding data..."));
+  console.log(colors.cyan("\n Seeding started..."));
 
-  //Generate Fake Items
+  //  Clear Existing Data Before Seeding
+  console.log(colors.yellow("🧹 Clearing existing data..."));
+  await prismaCLT.stockLog.deleteMany({});
+  await prismaCLT.ingredient.deleteMany({});
+  await prismaCLT.order.deleteMany({});
+  await prismaCLT.plate.deleteMany({});
+  await prismaCLT.item.deleteMany({});
+  console.log(colors.green("✅ All existing data cleared."));
+
+  const unitValues = ["KG", "PLATE", "LITRE", "PIECE"] as const;
+
+  //  Generate Fake Items
+  console.log(colors.yellow("📦 Generating items..."));
   const items = await Promise.all(
-    Array.from({ length: 50 }).map(async () => {
-      return prismaCLT.item.create({
+    Array.from({ length: 50 }).map(async () =>
+      prismaCLT.item.create({
         data: {
           name: faker.commerce.productName(),
-          unit: faker.helpers.arrayElement(["KG", "PLATE", "LITRE", "PIECE"]),
+          unit: faker.helpers.arrayElement(unitValues),
           price: faker.number.float({ min: 1, max: 100, fractionDigits: 2 }),
           stock: faker.number.float({ min: 1, max: 100, fractionDigits: 1 }),
         },
-      });
-    })
+      })
+    )
   );
-  console.log(colors.green(`Generated ${items.length} items`));
+  console.log(colors.green(`✅ ${items.length} items generated.`));
 
   //Generate Fake Plates
+  console.log(colors.yellow("🍽️ Generating plates..."));
   const plates = await Promise.all(
     Array.from({ length: 20 }).map(async () =>
       prismaCLT.plate.create({
@@ -50,9 +63,10 @@ async function seed() {
       })
     )
   );
-  console.log(colors.green(`Generated ${plates.length} plates`));
+  console.log(colors.green(`✅ ${plates.length} plates generated.`));
 
-  //Generate Fake Ingredients
+  // Generate Fake Ingredients
+  console.log(colors.yellow("🧑‍🍳 Generating ingredients..."));
   await Promise.all(
     Array.from({ length: 100 }).map(() =>
       prismaCLT.ingredient.create({
@@ -68,8 +82,10 @@ async function seed() {
       })
     )
   );
-  console.log(colors.green("Generated ingredients"));
-  //Generate Fake Orders
+  console.log(colors.green("✅ Ingredients generated."));
+
+  // Generate Fake Orders
+  console.log(colors.yellow("🛒 Generating orders..."));
   await Promise.all(
     Array.from({ length: 50 }).map(() =>
       prismaCLT.order.create({
@@ -80,9 +96,10 @@ async function seed() {
       })
     )
   );
-  console.log(colors.green("Generated orders"));
+  console.log(colors.green("✅ Orders generated."));
 
-  //Generate Fake Stock Logs
+  //  Generate Fake Stock Logs
+  console.log(colors.yellow(" Generating stock logs..."));
   await Promise.all(
     Array.from({ length: 100 }).map(() =>
       prismaCLT.stockLog.create({
@@ -98,8 +115,9 @@ async function seed() {
       })
     )
   );
-  console.log(colors.green("Generated stock logs"));
-  console.log(colors.cyan("Seeding completed"));
+  console.log(colors.green("✅ Stock logs generated."));
+
+  console.log(colors.cyan("\n Seeding completed successfully!\n"));
 }
 
 seed()

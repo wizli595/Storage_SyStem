@@ -30,8 +30,8 @@ export abstract class BaseRepository<Model> {
   /**
    * Get all records
    */
-  async findAll(): Promise<Model[]> {
-    return this.model.findMany();
+  async findAll(filter?: any): Promise<Model[]> {
+    return this.model.findMany(filter);
   }
 
   /**
@@ -45,6 +45,6 @@ export abstract class BaseRepository<Model> {
    * Delete a record by ID
    */
   async delete(id: string): Promise<Model> {
-    return this.model.delete({ where: { id } });
+    return this.model.update({ where: { id }, data: { isDeleted: true } });
   }
 }

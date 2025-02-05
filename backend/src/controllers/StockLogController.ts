@@ -1,24 +1,27 @@
 import { Request, Response, NextFunction } from "express";
 import BaseController from "../core/BaseController";
-import ItemService from "../services/itemService";
+import StockLogService from "../services/StockLogService";
 
-class ItemController extends BaseController {
-  private itemService: ItemService;
+class StockLogController extends BaseController {
+  private stockLogService: StockLogService;
 
   constructor() {
     super();
-    this.itemService = new ItemService();
+    this.stockLogService = new StockLogService();
   }
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     return this.handleRequest(req, res, next, () =>
-      this.itemService.create(req.body)
+      this.stockLogService.createStockLog(
+        req.body.itemId,
+        req.body.quantity,
+        req.body.actionBy
+      )
     );
   }
 
   async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const showDeleted = req.query.showDeleted === "true";
     return this.handleRequest(req, res, next, () =>
-      this.itemService.findAll(showDeleted)
+      this.stockLogService.findAll()
     );
   }
 
@@ -28,20 +31,30 @@ class ItemController extends BaseController {
     next: NextFunction
   ): Promise<void> {
     return this.handleRequest(req, res, next, () =>
-      this.itemService.findById(req.params.id)
+      this.stockLogService.findById(req.params.id)
     );
   }
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     return this.handleRequest(req, res, next, () =>
-      this.itemService.update(req.params.id, req.body)
+      this.stockLogService.update(req.params.id, req.body)
     );
   }
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     return this.handleRequest(req, res, next, () =>
-      this.itemService.delete(req.params.id)
+      this.stockLogService.delete(req.params.id)
+    );
+  }
+  async getByItemId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    return this.handleRequest(req, res, next, () =>
+      this.stockLogService.findByItemId(req.params.itemId)
     );
   }
 }
-export default ItemController;
+
+export default StockLogController;

@@ -20,16 +20,32 @@ enum Unit {
   PIECE
 }
 
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+enum StockChangeType {
+  RECEIVED
+  ISSUED
+  ADJUSTMENT
+}
+
 model Item {
-  id         String       @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  unit       Unit
-  price      Float
-  stock      Float
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Ingredient Ingredient[]
-  StockLog   StockLog[]
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  unit             Unit
+  price            Float
+  stock            Float
+  minStock         Float              @default(0)
+  isDeleted        Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  Ingredient       Ingredient[]
+  StockLog         StockLog[]
+  StockRequestItem StockRequestItem[]
 }
 
 model Plate {
@@ -61,15 +77,40 @@ model Order {
   plateId   String   @db.ObjectId
   plate     Plate    @relation(fields: [plateId], references: [id])
   quantity  Int
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model StockRequest {
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  requester        String
+  status           RequestStatus
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  StockRequestItem StockRequestItem[]
+}
+
+model StockRequestItem {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  requestId         String       @db.ObjectId
+  itemId            String       @db.ObjectId
+  requestedQuantity Float
+  approvedQuantity  Float?
+  issuedQuantity    Float?
+  item              Item         @relation(fields: [itemId], references: [id])
+  stockRequest      StockRequest @relation(fields: [requestId], references: [id])
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
 model StockLog {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  itemId   String   @db.ObjectId
-  quantity Float
-  actionBy String   @default("admin")
-  item     Item     @relation(fields: [itemId], references: [id])
-  date     DateTime @default(now())
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  itemId           String          @db.ObjectId
+  quantity         Float
+  actionBy         String          @default("admin")
+  changeType       StockChangeType
+  relatedRequestID String?         @db.ObjectId
+  item             Item            @relation(fields: [itemId], references: [id])
+  date             DateTime        @default(now())
 }

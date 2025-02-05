@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import router from "./routes/testRoute";
 import itemRouter from "./routes/itemRoute";
-
+import stockLogRouter from "./routes/StockLogRoute";
 import morgan from "morgan";
 import { errorHandler, errorLogger, notFoundHandler } from "./middlewares";
 import { accessLogStream } from "./utils/accessLogStream";
@@ -21,6 +21,7 @@ app.get("/", (req: Request, res: Response) => {
 // routes
 app.use("/test", router);
 
+app.use("/stock-log", stockLogRouter);
 app.use("/items", itemRouter);
 
 // error handlers
