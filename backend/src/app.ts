@@ -6,6 +6,7 @@ import stockRequestRouter from "./routes/StockRequestRoute";
 import PlateRouter from "./routes/PlateRoute";
 import ingredientRouter from "./routes/IngredientRoute";
 import orderRouter from "./routes/OrderRoute";
+import stockRequestItemRouter from "./routes/StockRequestItemRoute";
 import morgan from "morgan";
 import { errorHandler, errorLogger, notFoundHandler } from "./middlewares";
 import { accessLogStream } from "./utils/accessLogStream";
@@ -31,6 +32,7 @@ app.use("/stock-request", stockRequestRouter);
 app.use("/plates", PlateRouter);
 app.use("/ingredients", ingredientRouter);
 app.use("/orders", orderRouter);
+app.use("/stock-request-item", stockRequestItemRouter);
 // error handlers
 app.use(notFoundHandler);
 app.use(errorLogger);

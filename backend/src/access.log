@@ -96,3 +96,15 @@ fe80::fa13:4801:fb8a:bc0c%enp1s0 - - [20/Jan/2025:20:03:05 +0000] "GET /test HTT
 ::1 - - [05/Feb/2025:15:16:41 +0000] "GET /ingredient/plate/67a34dcc65a07481864db484 HTTP/1.1" 404 1306
 ::1 - - [05/Feb/2025:15:16:47 +0000] "GET /ingredients/plate/67a34dcc65a07481864db484 HTTP/1.1" 200 3844
 ::1 - - [05/Feb/2025:15:17:27 +0000] "GET /stock-log HTTP/1.1" 200 20447
+::1 - - [05/Feb/2025:15:38:01 +0000] "GET /stock-request HTTP/1.1" 200 1787
+::1 - - [05/Feb/2025:15:39:02 +0000] "GET /stock-request-item/request/67a34dcd65a07481864db594 HTTP/1.1" 200 975
+::1 - - [05/Feb/2025:15:39:28 +0000] "GET /stock-request-item/request/67a34dcd65a07481864db594 HTTP/1.1" 200 975
+::1 - - [05/Feb/2025:15:40:40 +0000] "PUT /stock-request-items/67a34dcd65a07481864db5c4/approve HTTP/1.1" 404 1328
+::1 - - [05/Feb/2025:15:40:47 +0000] "PUT /stock-request-item/67a34dcd65a07481864db5c4/approve HTTP/1.1" 200 278
+::1 - - [05/Feb/2025:15:41:36 +0000] "GET /stock-request-item/request/67a34dcd65a07481864db594 HTTP/1.1" 200 973
+::1 - - [05/Feb/2025:15:42:19 +0000] "PUT /stock-request-items/STOCK_REQUEST_ITEM_ID/issue HTTP/1.1" 404 1318
+::1 - - [05/Feb/2025:15:42:25 +0000] "PUT /stock-request-items/STOCK_REQUEST_ITEM_ID/issue HTTP/1.1" 404 1318
+::1 - - [05/Feb/2025:15:42:47 +0000] "PUT /stock-request-items/67a34dcd65a07481864db5c4/issue HTTP/1.1" 404 1324
+::1 - - [05/Feb/2025:15:42:51 +0000] "PUT /stock-request-item/67a34dcd65a07481864db5c4/issue HTTP/1.1" 200 276
+::1 - - [05/Feb/2025:15:42:59 +0000] "GET /stock-request-item/request/67a34dcd65a07481864db594 HTTP/1.1" 200 971
+::1 - - [05/Feb/2025:15:45:30 +0000] "GET /stock-log/ HTTP/1.1" 200 20447
