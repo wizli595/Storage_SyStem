@@ -1,39 +1,44 @@
 "use client";
-import { motion } from "framer-motion";
+
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Loader() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsVisible(false), 15000); // Loader lasts 1.5s
-    return () => clearTimeout(timeout);
-  }, []);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 1;
+      });
+    }, 15); // speed of progress (adjust as needed)
 
-  if (!isVisible) return null;
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <motion.div
-      key="server-loader"
       initial={{ opacity: 1 }}
-      animate={{ opacity: 0 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed inset-0 flex items-center justify-center bg-gray-900 text-white z-50">
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="flex flex-col items-center gap-4">
-        <motion.div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></motion.div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-lg font-semibold">
-          Loading...
-        </motion.p>
-      </motion.div>
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-[9999] bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="w-full max-w-sm px-6">
+        <div className="text-center text-xl font-semibold mb-4 text-indigo-600 dark:text-indigo-400">
+          Loading... {progress}%
+        </div>
+        <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ ease: "linear", duration: 0.1 }}
+            className="h-full bg-indigo-600 dark:bg-indigo-400"
+          />
+        </div>
+      </div>
     </motion.div>
   );
 }
