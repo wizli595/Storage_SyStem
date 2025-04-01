@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const menuItems = [
   { name: "Overview", href: "/dashboard" },
-  // { name: "Stock", href: "/dashboard/stock" },
+  { name: "Stock", href: "/dashboard/some" },
   // { name: "Orders", href: "/dashboard/orders" },
   // { name: "Analytics", href: "/dashboard/analytics" },
 ];

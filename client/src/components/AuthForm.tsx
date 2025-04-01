@@ -2,9 +2,11 @@
 
 import { AuthState } from "@/app/actions/auth";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { BiArrowBack } from "react-icons/bi";
 
 interface AuthFormProps {
-  action: (payload: FormData) => void;
+  action: (formData: FormData) => void;
   state: AuthState | undefined;
   pending: boolean;
 }
@@ -12,15 +14,18 @@ interface AuthFormProps {
 export default function AuthForm({ action, state, pending }: AuthFormProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-6">
-      {/* Animated Form Container */}
       <motion.form
-        initial={{ opacity: 0, scale: 0.8, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
         action={action}
-        className="bg-white/10 backdrop-blur-lg p-8 shadow-xl rounded-2xl border border-white/20 w-full max-w-md relative">
-        {/* Glowing Border Animation */}
-        <div className=" inset-0 rounded-2xl border border-transparent bg-gradient-to-br from-blue-500/40 via-transparent to-purple-500/40 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+        initial={{ opacity: 0, scale: 0.9, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative group bg-white/10 backdrop-blur-lg p-8 shadow-2xl rounded-2xl border border-white/20 w-full max-w-md">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ duration: 1 }}
+          className="absolute inset-0 rounded-2xl border border-transparent bg-gradient-to-br from-blue-500/40 via-transparent to-purple-500/40 pointer-events-none"
+        />
 
         <h2 className="text-2xl font-bold text-white text-center mb-6">
           🔒 Enter Access Code
@@ -44,7 +49,7 @@ export default function AuthForm({ action, state, pending }: AuthFormProps) {
             }}
             name="code"
             type="text"
-            placeholder="Enter code "
+            placeholder="Enter code"
             className="w-full p-3 mt-2 bg-gray-900 text-white border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
           />
           {state?.errors?.code && (
@@ -52,7 +57,6 @@ export default function AuthForm({ action, state, pending }: AuthFormProps) {
           )}
         </div>
 
-        {/* Animated Submit Button */}
         <motion.button
           whileHover={{
             scale: 1.05,
@@ -72,6 +76,19 @@ export default function AuthForm({ action, state, pending }: AuthFormProps) {
             "Submit"
           )}
         </motion.button>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mt-6 text-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-white hover:text-blue-400 transition-colors duration-200">
+            <BiArrowBack className="text-lg" />
+            Back to Home
+          </Link>
+        </motion.div>
       </motion.form>
     </div>
   );

@@ -1,19 +1,10 @@
-"use client";
-import { useActionState, useEffect } from "react";
-import { login } from "@/app/actions/auth";
-import { useRouter } from "next/navigation";
-import AuthForm from "@/components/AuthForm";
-import { toast } from "react-toastify";
+import { getSession } from "@/lib/session";
+import LoginForm from "@/components/LogingForm";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
-  const [state, action, pending] = useActionState(login, undefined);
-  const router = useRouter();
-  useEffect(() => {
-    if (state?.success === "Access Granted!") {
-      router.push("/dashboard");
-      toast.success("Access Granted!");
-    }
-  }, [state, router]);
+export default async function LoginPage() {
+  const session = await getSession();
+  if (session) redirect("/dashboard");
 
-  return <AuthForm action={action} state={state} pending={pending} />;
+  return <LoginForm />;
 }
