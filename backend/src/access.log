@@ -133,3 +133,5 @@ fe80::fa13:4801:fb8a:bc0c%enp1s0 - - [20/Jan/2025:20:03:05 +0000] "GET /test HTT
 ::1 - - [05/Feb/2025:16:04:18 +0000] "GET /orders HTTP/1.1" 200 9385
 ::1 - - [05/Feb/2025:16:04:30 +0000] "GET /stock-requests HTTP/1.1" 404 1252
 ::1 - - [05/Feb/2025:16:04:34 +0000] "GET /stock-request HTTP/1.1" 200 1942
+fe80::a046:412f:1b0:cfc0%wlan0 - - [01/Apr/2025:17:10:24 +0000] "GET /items HTTP/1.1" 200 10739
+fe80::a046:412f:1b0:cfc0%wlan0 - - [01/Apr/2025:17:10:33 +0000] "GET /items HTTP/1.1" 200 10739
