@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import { IngredientController } from "../controllers/IngredientController";
 import validateIngredient from "../validators/IngredientValidator";
 import { validateRequest } from "../middlewares/validateMiddlewares";
@@ -6,6 +6,7 @@ import { validateRequest } from "../middlewares/validateMiddlewares";
 const router = Router();
 const ingredientController = new IngredientController();
 
+router.get("/", ingredientController.getAllIngredients);
 router.post(
   "/",
   validateRequest(validateIngredient),

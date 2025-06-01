@@ -29,7 +29,7 @@ export default function HomeClient() {
       <div className="z-10 text-center max-w-2xl">
         <Image
           className="dark:invert mx-auto"
-          src="/logo.svg"
+          src="/log.png"
           alt="Logo"
           width={200}
           height={50}

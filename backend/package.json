@@ -16,6 +16,7 @@
   "description": "",
   "devDependencies": {
     "@types/chalk": "^0.4.31",
+    "@types/cors": "^2.8.18",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.1",
     "prisma": "^6.1.0",
@@ -29,6 +30,7 @@
     "@types/express": "^5.0.0",
     "chalk": "^5.3.0",
     "colors": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "envalid": "^8.0.0",
     "express": "^4.21.1",

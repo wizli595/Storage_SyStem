@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import cors from "cors";
 import router from "./routes/testRoute";
 import itemRouter from "./routes/ItemRoute";
 import stockLogRouter from "./routes/StockLogRoute";
@@ -14,7 +15,7 @@ import { accessLogStream } from "./utils/accessLogStream";
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 // logging
 app.use(morgan("dev"));
 app.use(morgan("common", { stream: accessLogStream(__dirname) }));

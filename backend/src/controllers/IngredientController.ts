@@ -13,6 +13,11 @@ export class IngredientController extends BaseController {
     this.getIngredientsByPlate = this.getIngredientsByPlate.bind(this);
     this.deleteIngredient = this.deleteIngredient.bind(this);
   }
+  async getAllIngredients(req: Request, res: Response, next: NextFunction) {
+    this.handleRequest(req, res, next, async () => {
+      return this.ingredientService.getAllIngredientsWithPlate();
+    });
+  }
 
   async addIngredient(req: Request, res: Response, next: NextFunction) {
     this.handleRequest(req, res, next, async () => {

@@ -1,76 +1,122 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { fetchItems, fetchOrders, fetchLowStockItems } from "@/lib/api";
+import DashboardCard from "@/components/DashboardCard";
+import StockLevelsOverview from "@/components/StockLevelsOverview";
+import StockHealthPieChart from "@/components/StockHealthPieChart";
+import OrdersTrendLineChart from "@/components/OrdersTrendLineChart";
+import { BarChart3, ShoppingCart, AlertTriangle } from "lucide-react";
+import SkeletonCard from "./SkeletonCard";
+import SkeletonChart from "./SkeletonChart";
 
 type Props = {
   userId: string;
 };
 
 export default function ClientDashboard({ userId }: Props) {
+  const { data: items = [], isLoading: loadingItems } = useQuery({
+    queryKey: ["items"],
+    queryFn: fetchItems,
+  });
+  const { data: orders = [], isLoading: loadingOrders } = useQuery({
+    queryKey: ["orders"],
+    queryFn: fetchOrders,
+  });
+  const { data: lowStockItems = [], isLoading: loadingLowStock } = useQuery({
+    queryKey: ["low-stock-items"],
+    queryFn: fetchLowStockItems,
+  });
+
+  const healthyStockCount = items.length - lowStockItems.length;
+  const ordersPerDay = groupOrdersByDay(orders);
+  if (loadingItems || loadingOrders || loadingLowStock) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-8">
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonChart />
+        <SkeletonChart />
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial="hidden"
       animate="visible"
-      variants={containerVariants}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.2 } },
+      }}
       className="flex flex-col gap-8">
       <motion.h1
-        variants={fadeInUp}
+        variants={{
+          hidden: { opacity: 0, y: 30 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+        }}
         className="text-3xl font-bold mb-6 text-center sm:text-left">
-        📊 Welcome, User {userId}
+        📊 Welcome back, User {userId}
       </motion.h1>
 
+      {/* Cards */}
       <motion.div
-        variants={staggerCards}
+        variants={{
+          hidden: {},
+          visible: {
+            transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+          },
+        }}
         className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Card title="Total Stock" value="12,340" />
-        <Card title="Orders Today" value="89" />
-        <Card title="Low Stock Alerts" value="4" />
+        <DashboardCard
+          title="Total Items"
+          value={items.length.toString()}
+          Icon={BarChart3}
+          description="Inventory in system"
+        />
+        <DashboardCard
+          title="Orders Today"
+          value={orders.length.toString()}
+          Icon={ShoppingCart}
+          description="+12% from yesterday"
+        />
+        <DashboardCard
+          title="Low Stock Alerts"
+          value={lowStockItems.length.toString()}
+          Icon={AlertTriangle}
+          description="Need immediate attention"
+        />
       </motion.div>
+
+      {/* Stock Levels */}
+      <StockLevelsOverview items={items} />
+
+      {/* Charts */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        <StockHealthPieChart
+          healthyCount={healthyStockCount}
+          lowStockCount={lowStockItems.length}
+        />
+        <OrdersTrendLineChart ordersData={ordersPerDay} />
+      </section>
     </motion.div>
   );
 }
+function groupOrdersByDay(orders: { quantity: number; createdAt: string }[]) {
+  const grouped: { [date: string]: number } = {};
 
-// Reusable card component with animation
-const Card = ({ title, value }: { title: string; value: string }) => (
-  <motion.div
-    variants={cardVariants}
-    className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-colors duration-300">
-    <h2 className="text-lg font-semibold">{title}</h2>
-    <p className="text-2xl font-bold mt-2">{value}</p>
-  </motion.div>
-);
+  orders.forEach((order) => {
+    const dateStr = new Date(order.createdAt).toISOString().slice(0, 10); // 'YYYY-MM-DD'
+    if (!grouped[dateStr]) {
+      grouped[dateStr] = 0;
+    }
+    grouped[dateStr] += order.quantity;
+  });
 
-// Animation variants
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const staggerCards = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.95, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
-};
+  return Object.entries(grouped).map(([date, orders]) => ({
+    date: new Date(date),
+    orders,
+  }));
+}

@@ -13,4 +13,7 @@ export class IngredientService extends BaseService<
   async findIngredientsByPlate(plateId: string) {
     return this.repository.findIngredientsByPlate(plateId);
   }
+  async getAllIngredientsWithPlate() {
+    return this.repository.findAllWithPlate();
+  }
 }

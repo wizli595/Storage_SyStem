@@ -10,7 +10,8 @@ export default function Docs() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.7 }}
       className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
-      <Header />
+      <Header compact />
+
       <main className="max-w-4xl mx-auto pt-24 p-8">
         <h1 className="text-4xl font-bold">📖 Documentation</h1>
         <p className="text-gray-500 dark:text-gray-300 mt-4">

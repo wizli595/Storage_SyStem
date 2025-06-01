@@ -9,24 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.71.1",
-    "@trpc/client": "^11.0.1",
-    "@trpc/react-query": "^11.0.1",
-    "@trpc/server": "^11.0.1",
+    "@tanstack/react-query": "^5.79.0",
+    "@tanstack/react-query-devtools": "^5.79.0",
     "axios": "^1.8.4",
     "framer-motion": "^12.4.3",
     "jose": "^6.0.10",
+    "lucide-react": "^0.511.0",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
+    "recharts": "^2.15.3",
     "superjson": "^2.2.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@trpc/next": "^11.0.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

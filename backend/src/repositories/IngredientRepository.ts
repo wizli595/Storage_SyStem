@@ -14,4 +14,16 @@ export class IngredientRepository extends BaseRepository<Ingredient> {
       include: { item: true },
     });
   }
+  async findAllWithPlate() {
+    return this.model.findMany({
+      include: {
+        plate: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+  }
 }

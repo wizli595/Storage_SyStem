@@ -1,25 +1,6 @@
 import prismaCLT from "../../prismaClient";
-import { fa, faker } from "@faker-js/faker";
-
+import { faker } from "@faker-js/faker";
 import colors from "colors";
-
-/**
- * 🌱 Seeding database with fake data
- *
- * Database Structure:
- *
- * - Item: Represents storage items (e.g., ingredients like meat, vegetables).
- * - Plate: Represents meals that customers order (e.g., steak, salad).
- * - Ingredient: Connects Items to Plates (each Plate has multiple Ingredients).
- * - Order: Represents a customer order for a specific Plate.
- * - StockLog: Keeps track of stock changes (restocking, usage, etc.).
- *
- * Relationships:
- * - An `Item` can be used as an `Ingredient` in multiple `Plates`.
- * - A `Plate` consists of multiple `Ingredients`.
- * - An `Order` is linked to a `Plate`.
- * - `StockLog` records stock changes for an `Item`.
- */
 
 async function seed() {
   console.log(colors.cyan("\n🌱 Seeding started..."));
@@ -45,29 +26,36 @@ async function seed() {
         data: {
           name: faker.commerce.productName(),
           unit: faker.helpers.arrayElement(unitValues),
-          price: faker.number.float({ min: 1, max: 100, fractionDigits: 2 }),
-          stock: faker.number.float({ min: 10, max: 100, fractionDigits: 1 }),
+          price: faker.number.float({ min: 5, max: 200, fractionDigits: 2 }),
+          stock: faker.number.float({ min: 20, max: 500, fractionDigits: 1 }),
+          minStock: faker.number.float({
+            min: 10,
+            max: 100,
+            fractionDigits: 1,
+          }),
+          createdAt: faker.date.past({ years: 1 }),
         },
       })
     )
   );
   console.log(colors.green(` ${items.length} items generated.`));
 
-  //  Generate Fake Plates
+  // 3️ Generate Fake Plates
   console.log(colors.yellow(" Generating plates..."));
   const plates = await Promise.all(
     Array.from({ length: 20 }).map(async () =>
       prismaCLT.plate.create({
         data: {
           name: faker.commerce.productName(),
-          price: faker.number.float({ min: 5, max: 50, fractionDigits: 2 }),
+          price: faker.number.float({ min: 20, max: 100, fractionDigits: 2 }),
+          createdAt: faker.date.past({ years: 1 }),
         },
       })
     )
   );
   console.log(colors.green(` ${plates.length} plates generated.`));
 
-  //  Generate Fake Ingredients
+  // 4️ Generate Fake Ingredients
   console.log(colors.yellow(" Generating ingredients..."));
   await Promise.all(
     Array.from({ length: 100 }).map(async () =>
@@ -75,50 +63,57 @@ async function seed() {
         data: {
           plateId: faker.helpers.arrayElement(plates).id,
           itemId: faker.helpers.arrayElement(items).id,
-          quantity: faker.number.float({ min: 0.1, max: 5, fractionDigits: 1 }),
+          quantity: faker.number.float({ min: 0.5, max: 5, fractionDigits: 1 }),
+          createdAt: faker.date.past({ years: 1 }),
         },
       })
     )
   );
   console.log(colors.green(" Ingredients generated."));
 
-  // Generate Fake Orders
+  // 5️ Generate Fake Orders with Random Past Dates
   console.log(colors.yellow(" Generating orders..."));
   await Promise.all(
-    Array.from({ length: 50 }).map(async () =>
+    Array.from({ length: 200 }).map(async () =>
       prismaCLT.order.create({
         data: {
           plateId: faker.helpers.arrayElement(plates).id,
-          quantity: faker.number.int({ min: 1, max: 5 }),
+          quantity: faker.number.int({ min: 1, max: 10 }),
+          createdAt: faker.date.recent({ days: 30 }), // last 30 days random
         },
       })
     )
   );
   console.log(colors.green("Orders generated."));
 
-  //  Generate Fake Stock Logs (Mix of Stock Received & Used)
+  // 6️ Generate Fake Stock Logs
   console.log(colors.yellow(" Generating stock logs..."));
   await Promise.all(
     Array.from({ length: 100 }).map(async () => {
-      const changeType = faker.helpers.arrayElement(["RECEIVED", "ISSUED"]);
+      const changeType = faker.helpers.arrayElement([
+        "RECEIVED",
+        "ISSUED",
+        "ADJUSTMENT",
+      ]);
       const quantity =
         changeType === "ISSUED"
-          ? -faker.number.float({ min: 1, max: 10, fractionDigits: 1 }) // Negative for issued stock
-          : faker.number.float({ min: 1, max: 20, fractionDigits: 1 }); // Positive for received stock
+          ? -faker.number.float({ min: 1, max: 20, fractionDigits: 1 })
+          : faker.number.float({ min: 1, max: 50, fractionDigits: 1 });
 
       return prismaCLT.stockLog.create({
         data: {
           itemId: faker.helpers.arrayElement(items).id,
           quantity,
           changeType,
-          actionBy: "admin",
+          actionBy: faker.person.firstName(),
+          date: faker.date.recent({ days: 90 }),
         },
       });
     })
   );
   console.log(colors.green(" Stock logs generated."));
 
-  //  Generate Fake Stock Requests
+  // 7️ Generate Fake Stock Requests
   console.log(colors.yellow(" Generating stock requests..."));
   const stockRequests = await Promise.all(
     Array.from({ length: 10 }).map(async () =>
@@ -129,7 +124,9 @@ async function seed() {
             "PENDING",
             "APPROVED",
             "REJECTED",
+            "COMPLETED",
           ]),
+          createdAt: faker.date.recent({ days: 60 }),
         },
       })
     )
@@ -138,7 +135,7 @@ async function seed() {
     colors.green(` ${stockRequests.length} stock requests generated.`)
   );
 
-  //  Generate Fake Stock Request Items
+  // 8️ Generate Fake Stock Request Items
   console.log(colors.yellow(" Generating stock request items..."));
   await Promise.all(
     stockRequests.map(async (request) => {
@@ -151,16 +148,17 @@ async function seed() {
               requestId: request.id,
               itemId: faker.helpers.arrayElement(items).id,
               requestedQuantity: faker.number.float({
-                min: 1,
-                max: 5,
+                min: 5,
+                max: 20,
                 fractionDigits: 1,
               }),
               approvedQuantity: faker.helpers.maybe(() =>
-                faker.number.float({ min: 1, max: 5, fractionDigits: 1 })
+                faker.number.float({ min: 1, max: 20, fractionDigits: 1 })
               ),
               issuedQuantity: faker.helpers.maybe(() =>
-                faker.number.float({ min: 1, max: 5, fractionDigits: 1 })
+                faker.number.float({ min: 1, max: 20, fractionDigits: 1 })
               ),
+              createdAt: faker.date.recent({ days: 60 }),
             },
           })
         )
@@ -169,7 +167,7 @@ async function seed() {
   );
   console.log(colors.green(" Stock request items generated."));
 
-  console.log(colors.cyan(" Seeding completed successfully!\n"));
+  console.log(colors.cyan("🎉 Seeding completed successfully!\n"));
 }
 
 seed()
