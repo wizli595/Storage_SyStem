@@ -12,6 +12,7 @@ export class IngredientController extends BaseController {
     this.addIngredient = this.addIngredient.bind(this);
     this.getIngredientsByPlate = this.getIngredientsByPlate.bind(this);
     this.deleteIngredient = this.deleteIngredient.bind(this);
+    this.getAllIngredients = this.getAllIngredients.bind(this);
   }
   async getAllIngredients(req: Request, res: Response, next: NextFunction) {
     this.handleRequest(req, res, next, async () => {

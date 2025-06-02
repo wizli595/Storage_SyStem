@@ -1,4 +1,4 @@
-import ClientDashboard from "@/components/ClientDashboard";
+import ClientStockPage from "@/components/ClientStockPage";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
@@ -9,5 +9,5 @@ export default async function StockPage() {
     redirect("/login");
   }
 
-  return <ClientDashboard userId={session.userId as string} />;
+  return <ClientStockPage />;
 }
