@@ -19,6 +19,7 @@ export class StockRequestItemController extends BaseController {
    */
   async getStockRequestItems(req: Request, res: Response, next: NextFunction) {
     this.handleRequest(req, res, next, async () => {
+      console.log(`Fetching items for request ID: ${req.params.requestId}`);
       return this.stockRequestItemService.findByRequestId(req.params.requestId);
     });
   }

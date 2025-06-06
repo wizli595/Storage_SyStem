@@ -20,8 +20,13 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(morgan("common", { stream: accessLogStream(__dirname) }));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, world!");
+// Health Check Route
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(), // uptime in seconds
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // routes

@@ -12,6 +12,7 @@ const menuItems = [
   { name: "Stock Requests", href: "/dashboard/stock-requests" }, // 📦 Stock Requests Page
   { name: "Plates", href: "/dashboard/plates" }, // 🍽️ Plates Page
   { name: "Stock Logs", href: "/dashboard/stock-logs" }, // 📚 Stock Logs Page
+  { name: "Stock Verfication", href: "/dashboard/stock-verfication" }, // 🔍 Stock Verification Page
 ];
 
 export default function Sidebar() {

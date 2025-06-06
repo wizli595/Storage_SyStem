@@ -50,6 +50,7 @@ export class StockRequestController extends BaseController {
     });
   }
   async getAllStockRequests(req: Request, res: Response, next: NextFunction) {
+    console.log(`Fetching all stock requests`);
     this.handleRequest(req, res, next, async () => {
       return this.stockRequestService.findAll();
     });

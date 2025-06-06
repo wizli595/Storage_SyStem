@@ -9,6 +9,13 @@ class OrderService extends BaseService<Order, OrderRepository> {
   async createOrder(plateId: string, quantity: number) {
     return this.repository.createOrder(plateId, quantity);
   }
+  async getOrdersWithPlates() {
+    return this.repository.findAllOrdersWithPlates();
+  }
+
+  async getOrderByIdWithPlate(id: string) {
+    return this.repository.findOrderByIdWithPlate(id);
+  }
 }
 
 export default OrderService;

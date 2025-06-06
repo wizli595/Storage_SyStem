@@ -61,6 +61,13 @@ class StockRequestRepository extends BaseRepository<StockRequest> {
       return { success: true };
     });
   }
+  async findAll() {
+    return this.model.findMany({
+      include: {
+        StockRequestItem: true,
+      },
+    });
+  }
 }
 
 export default StockRequestRepository;

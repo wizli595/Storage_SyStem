@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import Header from "@/components/Header";
+import { Header } from "@/components/layout/";
 
 export default function Docs() {
   return (

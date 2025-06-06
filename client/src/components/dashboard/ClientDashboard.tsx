@@ -2,20 +2,21 @@
 
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { fetchItems, fetchOrders, fetchLowStockItems } from "@/lib/api";
-import DashboardCard from "@/components/DashboardCard";
-import StockLevelsOverview from "@/components/StockLevelsOverview";
-import StockHealthPieChart from "@/components/StockHealthPieChart";
-import OrdersTrendLineChart from "@/components/OrdersTrendLineChart";
+import { fetchItems, fetchLowStockItems } from "@/server/items/itemsApi";
+import { fetchOrders } from "@/server/orders/orderApi";
+import DashboardCard from "@/components/dashboard/DashboardCard";
+import StockLevelsOverview from "@/components/dashboard/StockLevelsOverview";
+import StockHealthPieChart from "@/components/dashboard/StockHealthPieChart";
+import OrdersTrendLineChart from "@/components/dashboard/OrdersTrendLineChart";
 import { BarChart3, ShoppingCart, AlertTriangle } from "lucide-react";
-import SkeletonCard from "./SkeletonCard";
+import SkeletonCard from "../stock/SkeletonCard";
 import SkeletonChart from "./SkeletonChart";
 
 type Props = {
   userId: string;
 };
 
-export default function ClientDashboard({ userId }: Props) {
+export function ClientDashboard({ userId }: Props) {
   const { data: items = [], isLoading: loadingItems } = useQuery({
     queryKey: ["items"],
     queryFn: fetchItems,
@@ -31,6 +32,7 @@ export default function ClientDashboard({ userId }: Props) {
 
   const healthyStockCount = items.length - lowStockItems.length;
   const ordersPerDay = groupOrdersByDay(orders);
+
   if (loadingItems || loadingOrders || loadingLowStock) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-8">
@@ -104,7 +106,20 @@ export default function ClientDashboard({ userId }: Props) {
     </motion.div>
   );
 }
-function groupOrdersByDay(orders: { quantity: number; createdAt: string }[]) {
+
+function groupOrdersByDay(
+  orders: {
+    id: string;
+    plateId?: string;
+    quantity?: number;
+    isDeleted?: boolean;
+    createdAt: string;
+    updatedAt: string;
+    status?: "PENDING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+    customerName?: string;
+    totalAmount?: number;
+  }[]
+) {
   const grouped: { [date: string]: number } = {};
 
   orders.forEach((order) => {
@@ -112,7 +127,7 @@ function groupOrdersByDay(orders: { quantity: number; createdAt: string }[]) {
     if (!grouped[dateStr]) {
       grouped[dateStr] = 0;
     }
-    grouped[dateStr] += order.quantity;
+    grouped[dateStr] += 1;
   });
 
   return Object.entries(grouped).map(([date, orders]) => ({

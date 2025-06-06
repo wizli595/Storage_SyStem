@@ -1,4 +1,4 @@
-import HomeClient from "@/components/Home";
+import { HomeClient } from "@/components/ui/";
 
 // function delay(ms: number) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));

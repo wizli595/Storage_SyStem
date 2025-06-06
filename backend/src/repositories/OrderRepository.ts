@@ -46,5 +46,29 @@ class OrderRepository extends BaseRepository<Order> {
       });
     });
   }
+
+  /**
+   * Fetch all orders with their related plates
+   */
+  async findAllOrdersWithPlates() {
+    return this.model.findMany({
+      where: { isDeleted: false },
+      include: {
+        plate: true, // Eager load Plate
+      },
+    });
+  }
+
+  /**
+   * Fetch single order with plate
+   */
+  async findOrderByIdWithPlate(id: string) {
+    return this.model.findUnique({
+      where: { id },
+      include: {
+        plate: true,
+      },
+    });
+  }
 }
 export default OrderRepository;

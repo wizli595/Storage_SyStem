@@ -28,5 +28,8 @@ class StockRequestService extends BaseService<
   ): Promise<any> {
     return this.repository.issueStockRequest(id, issuedItems);
   }
+  async findAll(): Promise<StockRequest[]> {
+    return this.repository.findAll();
+  }
 }
 export default StockRequestService;

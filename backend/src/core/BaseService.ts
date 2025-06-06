@@ -33,8 +33,9 @@ export abstract class BaseService<
    * Get all records
    */
   async findAll(): Promise<Model[]> {
-    return this.repository.findAll();
+    return this.repository.findAll( );
   }
+  
 
   /**
    * Update a record by ID

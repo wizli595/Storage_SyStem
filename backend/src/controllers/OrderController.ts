@@ -19,13 +19,13 @@ class OrderController extends BaseController {
   }
   async getAllOrders(req: Request, res: Response, next: NextFunction) {
     this.handleRequest(req, res, next, async () => {
-      return this.orderService.findAll();
+      return this.orderService.getOrdersWithPlates();
     });
   }
   async getOrderById(req: Request, res: Response, next: NextFunction) {
     this.handleRequest(req, res, next, async () => {
       const { id } = req.params;
-      return this.orderService.findById(id);
+      return this.orderService.getOrderByIdWithPlate(id);
     });
   }
 }
