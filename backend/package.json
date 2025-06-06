@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-dev  --respawn src/index.ts",
-    "list-route": "ts-node src/commands/index.ts listRoutes"
+    "list-route": "ts-node src/commands/index.ts listRoutes",
+    "relation":" ts-node src/commands/index.ts relation"
   },
   "prisma": {
     "schema": "src/models/prisma/schema.prisma",

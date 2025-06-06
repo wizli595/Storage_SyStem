@@ -1,7 +1,9 @@
 // src/commands/index.ts
 // import { ServiceRepoCommand } from './ServiceRepoCommand';
 // import { ControllerServiceCommand } from './ControllerServiceCommand';
+
 import { ListRoutesCommand } from "./ListRoutesCommand";
+import { RelationCommand } from "./RelationCommand";
 // import { ControllerValidatorCommand } from './ControllerValidatorCommand';
 
 const args = process.argv.slice(2); // Get command-line args (after `node index.js`)
@@ -10,6 +12,7 @@ const inputCommand = args[0];
 const commandMap: { [key: string]: any } = {
   //   serviceRepo: ServiceRepoCommand,
   //   controllerService: ControllerServiceCommand,
+  relation: RelationCommand,
   listRoutes: ListRoutesCommand,
   //   controllerValidator: ControllerValidatorCommand,
 };
