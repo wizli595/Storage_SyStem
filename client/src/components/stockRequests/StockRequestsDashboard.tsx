@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -31,7 +30,7 @@ export default function StockRequestsDashboard() {
     (r) => r.status === "APPROVED"
   ).length;
   const issuedRequests = stockRequests.filter(
-    (r) => r.status === "ISSUED"
+    (r) => r.status === "COMPLETED"
   ).length;
 
   return (

@@ -11,9 +11,10 @@ class StockRequestService extends BaseService<
   }
   async createStockRequest(
     requester: string,
-    items: { itemId: string; requestedQuantity: number }[]
+    items: { itemId: string; requestedQuantity: number }[],
+    justification?: string
   ): Promise<StockRequest> {
-    return this.repository.createStockRequest(requester, items);
+    return this.repository.createStockRequest(requester, items, justification);
   }
 
   async approveStockRequest(id: string): Promise<StockRequest> {

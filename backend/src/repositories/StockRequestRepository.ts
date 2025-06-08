@@ -8,7 +8,8 @@ class StockRequestRepository extends BaseRepository<StockRequest> {
   }
   async createStockRequest(
     requester: string,
-    items: { itemId: string; requestedQuantity: number }[]
+    items: { itemId: string; requestedQuantity: number }[],
+    justification?: string
   ) {
     return this.model.create({
       data: {
@@ -20,6 +21,7 @@ class StockRequestRepository extends BaseRepository<StockRequest> {
             requestedQuantity: item.requestedQuantity,
           })),
         },
+        justification: justification,
       },
     });
   }

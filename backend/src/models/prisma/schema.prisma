@@ -85,6 +85,7 @@ model Order {
 model StockRequest {
   id               String             @id @default(auto()) @map("_id") @db.ObjectId
   requester        String
+  justification    String?
   status           RequestStatus
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt

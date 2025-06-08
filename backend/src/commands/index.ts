@@ -1,40 +1,50 @@
-// src/commands/index.ts
-// import { ServiceRepoCommand } from './ServiceRepoCommand';
-// import { ControllerServiceCommand } from './ControllerServiceCommand';
-
+import BaseCommand from "../core/BaseCommand";
 import { ListRoutesCommand } from "./ListRoutesCommand";
 import { RelationCommand } from "./RelationCommand";
-// import { ControllerValidatorCommand } from './ControllerValidatorCommand';
+// import { ArchitectureValidatorCommand } from "./ArchitectureValidatorCommand";
 
-const args = process.argv.slice(2); // Get command-line args (after `node index.js`)
-const inputCommand = args[0];
-
-const commandMap: { [key: string]: any } = {
-  //   serviceRepo: ServiceRepoCommand,
-  //   controllerService: ControllerServiceCommand,
-  relation: RelationCommand,
-  listRoutes: ListRoutesCommand,
-  //   controllerValidator: ControllerValidatorCommand,
+// Initialize command instances
+const commandInstances: { [key: string]: BaseCommand } = {
+  listRoutes: new ListRoutesCommand(),
+  relation: new RelationCommand(),
+  // validateArchitecture: new ArchitectureValidatorCommand(),
 };
 
-if (!inputCommand || !commandMap[inputCommand]) {
-  console.error(`❌ Unknown or missing command.
+// Helper to show help
+function showGlobalHelp() {
+  console.log(`\n✅ Available Commands:\n`);
+  for (const [cmd, instance] of Object.entries(commandInstances)) {
+    console.log(`  ${cmd.padEnd(25)} - ${instance.description}`);
+  }
+  console.log(`\n👉 Example:\n  npm run validateArchitecture -- --help\n`);
+}
 
-Available commands:
-  - serviceRepo
-  - controllerService
-  - listRoutes
-  - controllerValidator
+// Parse args
+const args = process.argv.slice(2); // ex: [relation, --help]
+const inputCommand = args[0];
+const inputFlags = args.slice(1); // ex: [--help]
 
-Example:
-  npm run serviceRepo
-`);
+if (!inputCommand || inputCommand === "-h" || inputCommand === "--help") {
+  showGlobalHelp();
+  process.exit(0);
+}
+
+const commandInstance = commandInstances[inputCommand];
+
+if (!commandInstance) {
+  console.error(`\n❌ Unknown command: ${inputCommand}`);
+  showGlobalHelp();
   process.exit(1);
 }
 
-const SelectedCommand = commandMap[inputCommand];
-const commandInstance = new SelectedCommand();
+// If user types: npm run relation -- --help
+if (inputFlags.includes("-h") || inputFlags.includes("--help")) {
+  console.log(`\n📚 Help for command: ${inputCommand}`);
+  console.log(`\n${commandInstance.description}\n`);
+  process.exit(0);
+}
 
+// If no --help, execute
 console.log(`\n--- ${commandInstance.name} ---`);
 console.log(`${commandInstance.description}\n`);
 commandInstance.execute();

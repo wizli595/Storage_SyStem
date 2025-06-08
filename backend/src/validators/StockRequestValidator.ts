@@ -22,5 +22,6 @@ const stockRequestValidator = joi.object({
     .messages({
       "array.min": "At least one item is required.",
     }),
+  justification: joi.string().allow("").optional(),
 });
 export default stockRequestValidator;

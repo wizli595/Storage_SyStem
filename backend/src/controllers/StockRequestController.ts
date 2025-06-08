@@ -26,8 +26,23 @@ export class StockRequestController extends BaseController {
     next: NextFunction
   ) => {
     this.handleRequest(req, res, next, async () => {
-      const { requester, items } = req.body;
-      return this.stockRequestService.createStockRequest(requester, items);
+      const { requester, items, justification } = req.body;
+      const totalQuantity = items.reduce(
+        (sum: number, item: any) => sum + item.requestedQuantity,
+        0
+      );
+
+      const THRESHOLD = 100; // CHANGEABLE: Set your threshold here
+
+      if (
+        totalQuantity > THRESHOLD &&
+        (!justification || justification.trim() === "")
+      ) {
+        throw new Error(
+          `Justification is required for stock requests over ${THRESHOLD} units (current total: ${totalQuantity}).`
+        );
+      }
+      return this.stockRequestService.createStockRequest(requester, items, justification);
     });
   };
   async updateStockRequest(req: Request, res: Response, next: NextFunction) {

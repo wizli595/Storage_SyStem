@@ -7,6 +7,7 @@ export function fetchStockRequests() {
 export function createStockRequest(data: {
   requester: string;
   items: { itemId: string; requestedQuantity: number }[];
+  justification: string;
 }) {
   return poster("/stock-request", data, StockRequestSchema);
 }

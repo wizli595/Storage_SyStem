@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchItems } from "@/server/items/itemsApi"; // assuming you have itemApi
+import { fetchItems } from "@/server/items/itemsApi";
 import { createStockRequest } from "@/server/stockRequests/stockRequestApi";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ export default function NewStockRequestModal({
   const [items, setItems] = useState<
     { itemId: string; requestedQuantity: number }[]
   >([{ itemId: "", requestedQuantity: 1 }]);
+  const [justification, setJustification] = useState("");
 
   const queryClient = useQueryClient();
 
@@ -56,6 +57,13 @@ export default function NewStockRequestModal({
     setItems(updatedItems);
   };
 
+  const totalQuantity = items.reduce(
+    (sum, item) => sum + (item.requestedQuantity || 0),
+    0
+  );
+
+  const THRESHOLD = 100;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (
@@ -65,7 +73,12 @@ export default function NewStockRequestModal({
       toast.error("Please fill all fields correctly.");
       return;
     }
-    mutation.mutate({ requester, items });
+    if (totalQuantity > THRESHOLD && !justification.trim()) {
+      toast.error("Justification is required for large requests.");
+      return;
+    }
+
+    mutation.mutate({ requester, items, justification });
   };
 
   return (
@@ -152,6 +165,30 @@ export default function NewStockRequestModal({
             + Add Another Item
           </button>
         </div>
+
+        {/* Total Quantity Display */}
+        <div className="mb-6 text-center">
+          <p className="text-gray-600 dark:text-gray-400">
+            <strong>Total Requested Quantity:</strong> {totalQuantity}
+          </p>
+        </div>
+
+        {/* Conditional Justification */}
+        {totalQuantity >= THRESHOLD && (
+          <div className="mb-6">
+            <label className="block text-gray-700 dark:text-gray-300 mb-2">
+              Justification (Required for large requests)
+            </label>
+            <textarea
+              value={justification}
+              onChange={(e) => setJustification(e.target.value)}
+              placeholder="Explain why such a large request is needed..."
+              required
+              className="w-full p-3 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              rows={3}
+            />
+          </div>
+        )}
 
         <button
           type="submit"
