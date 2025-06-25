@@ -1,6 +1,7 @@
 import prismaCTL from "../models/prismaClient";
 import { BaseRepository } from "../core/BaseRepository";
 import { StockRequest } from "@prisma/client";
+import { it } from "@faker-js/faker/.";
 
 class StockRequestRepository extends BaseRepository<StockRequest> {
   constructor() {
@@ -66,7 +67,11 @@ class StockRequestRepository extends BaseRepository<StockRequest> {
   async findAll() {
     return this.model.findMany({
       include: {
-        StockRequestItem: true,
+        StockRequestItem: {
+          include: {
+            item: true,
+          },
+        },
       },
     });
   }

@@ -29,6 +29,9 @@ class StockLogService extends BaseService<StockLog, StockLogRepository> {
       actionBy,
     });
   }
+  async findAll(): Promise<StockLog[]> {
+    return this.repository.findAll({ include: { item: true } });
+  }
 
   /**
    * Get stock logs for a specific item

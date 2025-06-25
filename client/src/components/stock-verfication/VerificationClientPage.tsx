@@ -76,6 +76,7 @@ export default function VerificationClientPage() {
         )
         .map((item) => ({
           itemId: item.itemId,
+          itemName: item.item?.name,
           requestedQuantity: item.requestedQuantity,
           issuedQuantity: item.issuedQuantity ?? null,
           riskLevel: "High",
@@ -206,7 +207,7 @@ export default function VerificationClientPage() {
 
       {/* Suspicious Items */}
       <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg mt-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-700 dark:text-gray-100">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
           🚨 Suspicious Stock Request Items
         </h2>
 
@@ -217,39 +218,58 @@ export default function VerificationClientPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {suspiciousItems
-              .map((item, index) => ({
+              .map((item, idx) => ({
                 ...item,
                 risk: getRiskLevel(item.requestedQuantity, item.issuedQuantity),
-                query: suspiciousItemQueries[index],
+                query: suspiciousItemQueries[idx],
               }))
-              .sort((a, b) => b.risk.value - a.risk.value) // High Risk first
+              .sort((a, b) => b.risk.value - a.risk.value) // Show high risk first
               .map((item, index) => {
-                if (item.query?.isLoading)
-                  return <p key={index}>Loading item {index + 1}...</p>;
-                if (item.query?.isError || !item.query.data)
-                  return <p key={index}>Error loading item {index + 1}</p>;
+                const {
+                  query,
+                  risk,
+                  itemId,
+                  requestedQuantity,
+                  issuedQuantity,
+                } = item;
 
-                const stockLogs = item.query.data;
+                if (query?.isLoading)
+                  return (
+                    <div key={index} className="text-center text-gray-500">
+                      Loading item {index + 1}...
+                    </div>
+                  );
+
+                if (query?.isError || !query.data)
+                  return (
+                    <div key={index} className="text-center text-red-500">
+                      Error loading item {index + 1}
+                    </div>
+                  );
+
+                const stockLogs = query.data;
 
                 return (
                   <div
                     key={item.id}
-                    className="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl shadow mb-4">
+                    className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                    {/* Header */}
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-700 dark:text-gray-200">
-                        Item ID: {item.itemId}
+                      <span className="text-gray-800 dark:text-gray-100 font-medium">
+                        🧾 {item?.item?.name || `Item ID: ${itemId}`}
                       </span>
-                      <span
-                        className={`text-sm font-semibold ${item.risk.color}`}>
-                        {item.risk.label}
+                      <span className={`text-sm font-semibold ${risk.color}`}>
+                        {risk.label}
                       </span>
-                    </div>
-                    <div className="text-gray-500 dark:text-gray-400 text-sm mb-2">
-                      Requested: {item.requestedQuantity}, Issued:{" "}
-                      {item.issuedQuantity ?? "N/A"}
                     </div>
 
-                    {/* Chart */}
+                    {/* Quantities */}
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Requested: <strong>{requestedQuantity}</strong> | Issued:{" "}
+                      <strong>{issuedQuantity ?? "N/A"}</strong>
+                    </div>
+
+                    {/* Line Chart */}
                     <ResponsiveContainer width="100%" height={200}>
                       <LineChart data={stockLogs}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -271,10 +291,10 @@ export default function VerificationClientPage() {
                       </LineChart>
                     </ResponsiveContainer>
 
-                    {/* Explanation Label */}
-                    <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                    {/* Trend Analysis */}
+                    <p className="mt-3 text-sm text-gray-600 dark:text-gray-300 italic">
                       {analyzeStockTrend(stockLogs)}
-                    </div>
+                    </p>
                   </div>
                 );
               })}

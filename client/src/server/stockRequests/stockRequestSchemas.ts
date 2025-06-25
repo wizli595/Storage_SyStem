@@ -9,6 +9,14 @@ export const StockRequestItemSchema = z.object({
   issuedQuantity: z.number().nullable().optional(), // <-- nullable
   createdAt: z.string(),
   updatedAt: z.string(),
+  item: z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string().nullable().optional(),
+    stock: z.number(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
 });
 
 export const StockRequestSchema = z.object({
